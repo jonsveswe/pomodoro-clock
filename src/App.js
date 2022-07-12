@@ -107,6 +107,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1 className="text-3xl font-bold underline bg-green-700">Tailwind test</h1>
       <Break
         breakLength={breakLength}
         decrementBreakLengthByOneMinute={decrementBreakLengthByOneMinute}
