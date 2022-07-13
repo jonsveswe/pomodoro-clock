@@ -100,15 +100,36 @@ function App() {
     // reset the timer to 25 minutes (initial session length)
     setTimeLeft(60 * 25);
   };
-
+  let bgColor = 'bg-emerald-900';
   return (
-    <div className="flex flex-col h-screen items-center justify-center bg-green-700">
+    <div>
+    {!isStarted ? 
+      <div className={`flex flex-col h-screen items-center justify-center ${bgColor}`}>
+        <div className="flex w-full justify-around">
+          <Break
+            breakLength={breakLength}
+            decrementBreakLengthByOneMinute={decrementBreakLengthByOneMinute}
+            incrementBreakLengthByOneMinute={incrementBreakLengthByOneMinute}
+          />
+          <TimeLeft
+            handleResetButtonClick={handleResetButtonClick}
+            handleStartStopClick={handleStartStopClick}
+            timerLabel={currentSessionType}
+            startStopButtonLabel={isStarted ? 'Stop' : 'Start'}
+            timeLeft={timeLeft}
+          />
+          <Session
+            sessionLength={sessionLength}
+            decrementSessionLengthByOneMinute={decrementSessionLengthByOneMinute}
+            incrementSessionLengthByOneMinute={incrementSessionLengthByOneMinute}
+          />
+        </div>
+        <audio id="beep" ref={audioElement}>
+          <source src="http://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a" type="audio/mpeg" />
+        </audio>
+      </div> :
+      <div className={`flex flex-col h-screen items-center justify-center bg-black`}>
       <div className="flex w-full justify-around">
-        <Break
-          breakLength={breakLength}
-          decrementBreakLengthByOneMinute={decrementBreakLengthByOneMinute}
-          incrementBreakLengthByOneMinute={incrementBreakLengthByOneMinute}
-        />
         <TimeLeft
           handleResetButtonClick={handleResetButtonClick}
           handleStartStopClick={handleStartStopClick}
@@ -116,16 +137,14 @@ function App() {
           startStopButtonLabel={isStarted ? 'Stop' : 'Start'}
           timeLeft={timeLeft}
         />
-        <Session
-          sessionLength={sessionLength}
-          decrementSessionLengthByOneMinute={decrementSessionLengthByOneMinute}
-          incrementSessionLengthByOneMinute={incrementSessionLengthByOneMinute}
-        />
       </div>
       <audio id="beep" ref={audioElement}>
         <source src="http://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a" type="audio/mpeg" />
       </audio>
-    </div>
+    </div> 
+    }
+  </div>
+
   );
 }
 

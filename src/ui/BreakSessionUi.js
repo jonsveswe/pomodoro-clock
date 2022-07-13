@@ -26,7 +26,7 @@ export const BreakSessionTime = ({ children, ...props }) => {
 
 export const PlusMinusButton = ({ children, ...props }) => {
   return (
-    <button {...props} className="mt-2 text-lg text-gray-800 px-4 py-2 bg-green-200 rounded">
+    <button {...props} className="mt-2 text-lg text-gray-800 px-4 py-2 bg-green-300 rounded">
       {children}
     </button>
   );
