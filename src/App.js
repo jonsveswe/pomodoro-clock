@@ -16,6 +16,23 @@ function App() {
     setTimeLeft(sessionLength);
   }, [sessionLength]);
 
+  // listen to timeLeft changes
+  useEffect(() => {
+    // if timeLeft is zero
+    if (timeLeft === 0) {
+      // play the audio
+      audioElement?.current?.play(); // optional chaining
+      // change session to break or break to session
+      if (currentSessionType === 'Session') {
+        setCurrentSessionType('Break');
+        setTimeLeft(breakLength);
+      } else if (currentSessionType === 'Break') {
+        setCurrentSessionType('Session');
+        setTimeLeft(sessionLength);
+      }
+    }
+  }, [breakLength, currentSessionType, sessionLength, timeLeft]);
+    
   const decrementBreakLengthByOneMinute = () => {
     const newBreakLength = breakLength - 60;
     if (newBreakLength > 0) {
@@ -50,35 +67,16 @@ function App() {
       // if we are in started mode:
       // we want to stop the timer
       // clearInterval
-      clearInterval(intervalId);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
       setIntervalId(null);
     } else {
       // if we are in stopped mode:
       // decrement timeLeft by one every second (1000 ms)
       // to do this we'll use setInterval
       const newIntervalId = setInterval(() => {
-        setTimeLeft(prevTimeLeft => {
-          const newTimeLeft = prevTimeLeft - 1;
-          if (newTimeLeft >= 0) {
-            return newTimeLeft;
-          }
-          // time left is less than zero
-          audioElement.current.play();
-          // if session:
-          if (currentSessionType === 'Session') {
-            // switch to break
-            setCurrentSessionType('Break');
-            // setTimeLeft to breakLength
-            return breakLength;
-          }
-          // if break:
-          else if (currentSessionType === 'Break') {
-            // switch to session
-            setCurrentSessionType('Session');
-            // setTimeLeft to sessionLength
-            return sessionLength;
-          }
-        });
+        setTimeLeft(prevTimeLeft => prevTimeLeft - 1);
       }, 100); // TODO: turn back into 1000
       setIntervalId(newIntervalId);
     }
