@@ -4,9 +4,9 @@ import Session from './components/Session';
 import TimeLeft from './components/TimeLeft';
 
 function App() {
-  const audioElement = useRef(null);
+  const audioElement = useRef<HTMLAudioElement>(null);
   const [currentSessionType, setCurrentSessionType] = useState('Session'); // 'Session' or 'Break'
-  const [intervalId, setIntervalId] = useState(null);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [sessionLength, setSessionLength] = useState(60 * 25);
   const [breakLength, setBreakLength] = useState(300);
   const [timeLeft, setTimeLeft] = useState(sessionLength);
@@ -21,7 +21,7 @@ function App() {
     // if timeLeft is zero
     if (timeLeft === 0) {
       // play the audio
-      audioElement?.current?.play(); // optional chaining
+      audioElement?.current?.play(); // Question mark becuase it can be null, it is called optional chaining (Typescript)
       // change session to break or break to session
       if (currentSessionType === 'Session') {
         setCurrentSessionType('Break');
@@ -84,9 +84,11 @@ function App() {
 
   const handleResetButtonClick = () => {
     // reset audio
-    audioElement.current.load();
+    audioElement?.current?.load();
     // clear the timeout interval
-    clearInterval(intervalId);
+    if (intervalId) { 
+      clearInterval(intervalId);      
+    }
     // set the intervalId null
     setIntervalId(null);
     // set the sessiontype to 'Session'
